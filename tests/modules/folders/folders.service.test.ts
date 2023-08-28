@@ -7,7 +7,7 @@ jest.mock('../../../src/modules/folders/folders.repository', () => ({
     create: jest.fn((data) => FolderMock),
     update: jest.fn(() => FolderMock),
     getMany: jest.fn(() => FoldersMock),
-    getOne: jest.fn((data) => FolderMock),
+    getOne: jest.fn(),
     getById: jest.fn((id) => id ? FolderMock : null),
     delete: jest.fn(),
   }
@@ -22,6 +22,7 @@ describe('FolderService', () => {
   describe('FolderService.create', () => {
     it('should call FolderRepository.create', async () => {
       const folder = await FolderService.createFolder(FolderMock);
+      expect(FolderRepository.getOne).toBeCalled();
       expect(FolderRepository.create).toBeCalledWith(FolderMock);
       expect(folder).toEqual(FolderMock);
     });

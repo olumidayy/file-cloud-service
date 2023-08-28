@@ -75,7 +75,6 @@ describe('/api/files Endpoints.', () => {
         .field('name', body.name)
         .field('folderId', body.folderId)
         .attach('file', `${__dirname}/test.png`);
-      console.log(response);
       expect(FolderService.getFolderById).toBeCalledWith(body.folderId);
       expect(FileRepository.getOne).toBeCalled();
       expect(S3Service.UploadFileToS3).toBeCalled();
