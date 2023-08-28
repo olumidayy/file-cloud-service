@@ -1,3 +1,4 @@
+import { Folder } from '@prisma/client';
 import { APIError } from '../../common';
 import FolderRepository from './folders.repository';
 
@@ -7,7 +8,7 @@ export default class FolderService {
    * @param
    * @returns list of folders
   */
-  static async createFolder(data: any): Promise<any[]> {
+  static async createFolder(data: any): Promise<Folder[]> {
     const exists = await FolderRepository.getOne({
       userId: data.userId,
       name: data.name,
@@ -27,7 +28,7 @@ export default class FolderService {
    * @param
    * @returns list of folders
   */
-  static async getAllFolders(): Promise<any[]> {
+  static async getAllFolders(): Promise<Folder[]> {
     const folders = await FolderRepository.getMany();
     return folders;
   }
@@ -37,7 +38,7 @@ export default class FolderService {
    * @param id the folder ID.
    * @returns a folder or null.
   */
-  static async getFolderById(id: string): Promise<any> {
+  static async getFolderById(id: string): Promise<Folder> {
     const folder = await FolderRepository.getById(id);
     if (!folder) {
       throw new APIError({ message: 'Folder not found.', code: 404 });
@@ -50,12 +51,9 @@ export default class FolderService {
    * @param id the user ID.
    * @returns a folder or null.
   */
-  static async getFoldersByUserId(userId: string): Promise<any> {
-    const folder = await FolderRepository.getMany({ userId });
-    if (!folder) {
-      throw new APIError({ message: 'Folder not found.', code: 404 });
-    }
-    return folder;
+  static async getFoldersByUserId(userId: string): Promise<Folder[]> {
+    const folders = await FolderRepository.getMany({ userId });
+    return folders;
   }
 
   /**

@@ -47,6 +47,7 @@ jest.mock('../../../src/modules/files/files.repository', () => ({
 jest.mock('../../../src/services/cache.service', () => ({
   default: {
     DeleteItem: jest.fn(),
+    IsTokenBlacklisted: jest.fn(),
   }
 }));
 
@@ -98,7 +99,7 @@ describe('/api/files Endpoints.', () => {
       expect(response.statusCode).toBe(200);
       expect(response.body.success).toBe(true);
       expect(response.body.message).toBe('Files fetched.');
-      expect(response.body.data).toStrictEqual(FilesMock);
+      expect(response.body.data.data).toStrictEqual(FilesMock);
     });
   });
 
@@ -111,7 +112,7 @@ describe('/api/files Endpoints.', () => {
       expect(response.statusCode).toBe(200);
       expect(response.body.success).toBe(true);
       expect(response.body.message).toBe('Files fetched.');
-      expect(response.body.data).toStrictEqual(FilesMock);
+      expect(response.body.data.data).toStrictEqual(FilesMock);
     });
   });
 
@@ -139,7 +140,7 @@ describe('/api/files Endpoints.', () => {
       expect(response.statusCode).toBe(200);
       expect(response.body.success).toBe(true);
       expect(response.body.message).toBe('File history fetched.');
-      expect(response.body.data).toStrictEqual(FileHistoriesMock);
+      expect(response.body.data.data).toStrictEqual(FileHistoriesMock);
     });
   });
 

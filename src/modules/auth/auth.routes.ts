@@ -4,6 +4,8 @@ import { APIResponse } from '../../common';
 import {
   ChangePasswordValidator, ConfirmOTPValidator, LoginValidator, RegisterValidator, SendOTPValidator,
 } from './auth.validators';
+import { AuthGuard } from './middlewares';
+import CacheService from '../../services/cache.service';
 
 const AuthRouter = express.Router();
 
@@ -106,6 +108,24 @@ export default (app: express.Router) => {
         res.status(200).json(new APIResponse({
           success: true,
           message: 'Email verified.',
+          code: 200,
+        }));
+      } catch (error) {
+        next(error);
+      }
+    },
+  );
+
+  AuthRouter.post(
+    '/revoke-session',
+    AuthGuard('*'),
+    async (req, res, next) => {
+      try {
+        const token = req.headers.authorization?.split(' ')[1] || '';
+        await CacheService.BlacklistToken(token);
+        res.status(200).json(new APIResponse({
+          success: true,
+          message: 'Session revoked.',
           code: 200,
         }));
       } catch (error) {

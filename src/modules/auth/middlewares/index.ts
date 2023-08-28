@@ -3,8 +3,14 @@ import { APIError } from '../../../common';
 import config from '../../../config';
 import logger from '../../../common/logger';
 import UserService from '../../users/users.service';
+import CacheService from '../../../services/cache.service';
 
 export async function validateToken(token: string): Promise<any> {
+  const blacklisted: boolean = await CacheService.IsTokenBlacklisted(token);
+  if (blacklisted) {
+    logger.error('Session revoked.');
+    throw new APIError({ message: 'Unauthorized.', code: 401 });
+  }
   return new Promise((resolve, reject) => {
     verify(token, config.jwtSecretKey, (error, decoded) => {
       if (error) return reject(error);
@@ -35,13 +41,14 @@ export function AuthGuard(roles: string | string[]) {
         if (roles === '*' || roles.includes(data.role)) {
           return next();
         }
-        return next(new APIError({ message: 'Unauthorized.', code: 401 }));
+        return next(new APIError({ message: 'Unauthorized1.', code: 401 }));
       } catch (error) {
         logger.error(error);
-        return next(new APIError({ message: 'Unauthorized.', code: 401 }));
+        if (error.code) return next(error);
+        return next(new APIError({ message: 'Unauthorized2.', code: 401 }));
       }
     } else {
-      return next(new APIError({ message: 'Unauthorized.', code: 401 }));
+      return next(new APIError({ message: 'Unauthorized3.', code: 401 }));
     }
   };
 }

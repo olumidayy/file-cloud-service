@@ -10,6 +10,7 @@ import S3Service from '../../services/s3.service';
 import { UpdateFileValidator, UploadFileValidator } from './files.validators';
 import FileRepository from './files.repository';
 import CacheService from '../../services/cache.service';
+import { paginateData } from '../../common/helpers';
 
 const upload = multer({
   limits: {
@@ -68,7 +69,7 @@ export default (app: Router) => {
           success: true,
           message: 'Files fetched.',
           code: 200,
-          data: files,
+          data: paginateData(files, req.query.page),
         }));
       } catch (error) {
         next(error);
@@ -86,7 +87,7 @@ export default (app: Router) => {
           success: true,
           message: 'Files fetched.',
           code: 200,
-          data: files,
+          data: paginateData(files, req.query.page),
         }));
       } catch (error) {
         next(error);
@@ -115,12 +116,12 @@ export default (app: Router) => {
     '/:id/history',
     async (req, res, next) => {
       try {
-        const file = await FileService.getFileHistory(req.params.id);
+        const history = await FileService.getFileHistory(req.params.id);
         res.status(200).json(new APIResponse({
           success: true,
           message: 'File history fetched.',
           code: 200,
-          data: file,
+          data: paginateData(history, req.query.page),
         }));
       } catch (error) {
         next(error);

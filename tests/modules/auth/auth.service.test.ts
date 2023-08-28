@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { validateToken } from '../../../src/modules/auth/middlewares';
-import generateOTP from '../../../src/common/helpers';
+import { generateOTP } from '../../../src/common/helpers';
 import AuthService from '../../../src/modules/auth/auth.service';
 import UserRepository from '../../../src/modules/users/users.repository';
 import { UserMock } from '../../mocks';
@@ -17,7 +17,7 @@ jest.mock('jsonwebtoken', () => ({
 }));
 
 jest.mock('../../../src/common/helpers', () => ({
-  default: jest.fn(),
+  generateOTP: jest.fn(),
 }));
 
 jest.mock('../../../src/modules/users/users.repository', () => ({

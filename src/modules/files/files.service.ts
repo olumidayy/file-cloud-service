@@ -12,7 +12,7 @@ export default class FileService {
    * @param
    * @returns list of files
   */
-  static async createFile(data: any): Promise<any> {
+  static async createFile(data: any): Promise<File> {
     try {
       const file = await FileRepository.create(data);
       return file;
@@ -27,7 +27,7 @@ export default class FileService {
    * @param
    * @returns list of files
   */
-  static async getAllFiles(): Promise<any[]> {
+  static async getAllFiles(): Promise<File[]> {
     const files = await FileRepository.getMany();
     return files;
   }
@@ -37,7 +37,7 @@ export default class FileService {
    * @param id the file ID.
    * @returns a file or null.
   */
-  static async getFileById(id: string): Promise<any> {
+  static async getFileById(id: string): Promise<File> {
     const file = await FileRepository.getById(id);
     if (!file) {
       throw new APIError({ message: 'File not found.', code: 404 });
@@ -50,7 +50,7 @@ export default class FileService {
    * @param id the file ID.
    * @returns a file or null.
   */
-  static async getOneFile(data: any): Promise<any> {
+  static async getOneFile(data: any): Promise<File> {
     const file = await FileRepository.getOne(data);
     if (!file) {
       throw new APIError({ message: 'File not found.', code: 404 });
@@ -63,7 +63,7 @@ export default class FileService {
    * @param id the user ID.
    * @returns a file or null.
   */
-  static async getFilesByUserId(userId: string): Promise<any> {
+  static async getFilesByUserId(userId: string): Promise<File[]> {
     const files = await FileRepository.getMany({ userId });
     return files;
   }

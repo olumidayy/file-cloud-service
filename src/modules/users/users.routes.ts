@@ -4,6 +4,7 @@ import UserService from './users.service';
 import APIResponse from '../../common/response';
 import { AuthGuard } from '../auth/middlewares';
 import { ChangeRoleValidator, UpdateProfileValidator } from './users.validators';
+import { paginateData } from '../../common/helpers';
 
 const usersRouter = express.Router();
 
@@ -20,7 +21,7 @@ export default (app: express.Router) => {
           success: true,
           message: 'Users fetched.',
           code: 200,
-          data: users,
+          data: paginateData(users, req.query.page),
         }));
       } catch (error) {
         next(error);

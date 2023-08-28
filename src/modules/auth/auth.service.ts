@@ -4,7 +4,7 @@ import { sign, SignOptions, TokenExpiredError } from 'jsonwebtoken';
 import { LoginDTO, RegisterDTO } from './auth.interfaces';
 import { APIError } from '../../common';
 import config from '../../config';
-import generateOTP from '../../common/helpers';
+import { generateOTP } from '../../common/helpers';
 import { validateToken } from './middlewares';
 import logger from '../../common/logger';
 import UserRepository from '../users/users.repository';
@@ -61,7 +61,7 @@ export default class AuthService {
     }
     const otp = generateOTP();
     const signInOptions: SignOptions = {
-      expiresIn: '300000',
+      expiresIn: 60 * 60 * 6,
     };
     const token = sign({ otp }, config.jwtSecretKey, signInOptions);
     await UserRepository.update(user.id, { otp: token });

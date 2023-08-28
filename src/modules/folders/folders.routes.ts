@@ -3,6 +3,7 @@ import FolderService from './folders.service';
 import APIResponse from '../../common/response';
 import { AuthGuard } from '../auth/middlewares';
 import { NewFolderValidator, UpdateFolderValidator } from './folders.validators';
+import { paginateData } from '../../common/helpers';
 
 export default (app: express.Router) => {
   const foldersRouter = express.Router();
@@ -15,12 +16,12 @@ export default (app: express.Router) => {
     async (req, res, next) => {
       try {
         req.body.userId = req.currentUser.id;
-        const folders = await FolderService.createFolder(req.body);
+        const folder = await FolderService.createFolder(req.body);
         res.status(200).json(new APIResponse({
           success: true,
           message: 'Folder created.',
           code: 200,
-          data: folders,
+          data: folder,
         }));
       } catch (error) {
         next(error);
@@ -37,7 +38,7 @@ export default (app: express.Router) => {
           success: true,
           message: 'Folders fetched.',
           code: 200,
-          data: folders,
+          data: paginateData(folders, req.query.page),
         }));
       } catch (error) {
         next(error);

@@ -3,7 +3,7 @@ import prisma from '../../../prisma/client';
 
 export default class UserRepository {
   static allowedFields = {
-    id: true, firstname: true, lastname: true, email: true, files: true, folders: true, role: true,
+    id: true, firstname: true, lastname: true, email: true, folders: true, role: true,
   };
 
   static async create(data): Promise<any> {
@@ -39,7 +39,7 @@ export default class UserRepository {
     }
     user = await prisma.user.findUnique({
       where: { id, deleted: false },
-      select: this.allowedFields,
+      select: { ...this.allowedFields, files: true },
     });
     if (user) {
       CacheService.SetItem(user.id, user);
@@ -55,7 +55,7 @@ export default class UserRepository {
   static async getOne(data: any): Promise<any> {
     const user = await prisma.user.findFirst({
       where: { ...data, deleted: false },
-      select: this.allowedFields,
+      select: { ...this.allowedFields, files: true },
     });
     if (user) {
       CacheService.SetItem(user.id, user);
