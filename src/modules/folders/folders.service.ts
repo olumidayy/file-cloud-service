@@ -8,8 +8,18 @@ export default class FolderService {
    * @returns list of folders
   */
   static async createFolder(data: any): Promise<any[]> {
-    const folders = await FolderRepository.create(data);
-    return folders;
+    const exists = await FolderRepository.getOne({
+      userId: data.userId,
+      name: data.name,
+    });
+    if (exists) {
+      throw new APIError({
+        message: 'You already own a folder with this name.',
+        code: 400,
+      });
+    }
+    const folder = await FolderRepository.create(data);
+    return folder;
   }
 
   /**

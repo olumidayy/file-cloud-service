@@ -7,5 +7,6 @@ export default async function connectDatabase() {
   } catch (error) {
     logger.error('Could not connect to database.');
     logger.error(error);
+    process.exit(1);
   }
 }
