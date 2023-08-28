@@ -1,9 +1,9 @@
 import { createClient } from 'redis';
-import { logger } from '../common';
 import config from '../config';
+import { logger } from '../common';
 
 const redisClient = createClient({
-  url: `redis://:@${config.redisHost}:6379`,
+  url: config.redisUrl,
 });
 
 async function connectRedisClient() {

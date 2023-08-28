@@ -23,7 +23,7 @@ export default {
 
   maxFlagCount: Number(process.env.MAX_FLAG_COUNT) || 5,
 
-  redisHost: process.env.REDIS_HOST || 'localhost',
+  redisUrl: process.env.REDIS_URL || 'redis://:@localhost:6379',
 
   api: {
     prefix: '/api',

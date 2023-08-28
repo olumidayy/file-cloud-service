@@ -6,6 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
     env_file: .env
+    networks:
+      - default
     depends_on:
       - database
     ports:
