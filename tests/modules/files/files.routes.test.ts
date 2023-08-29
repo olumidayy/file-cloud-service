@@ -9,13 +9,13 @@ import FolderService from '../../../src/modules/folders/folders.service';
 import S3Service from '../../../src/services/s3.service';
 import { FileAction } from '@prisma/client';
 import CacheService from '../../../src/services/cache.service';
-import FileRepository from '../../../src/modules/files/files.repository';
 
 jest.mock('../../../src/modules/files/files.service', () => ({
   default: {
     createFile: jest.fn((data) => FileMock),
     getAllFiles: jest.fn(() => FilesMock),
     getFileById: jest.fn((id) => id ? FileMock : null),
+    getOneFile: jest.fn(),
     getFilesByUserId: jest.fn(() => FilesMock),
     updateFile: jest.fn(() => FileMock),
     deleteFile: jest.fn(() => FileMock.key),
@@ -35,12 +35,6 @@ jest.mock('../../../src/modules/users/users.service', () => ({
 jest.mock('../../../src/modules/folders/folders.service', () => ({
   default: {
     getFolderById: jest.fn((id) => FolderMock),
-  }
-}));
-
-jest.mock('../../../src/modules/files/files.repository', () => ({
-  default: {
-    getOne: jest.fn(),
   }
 }));
 
@@ -77,7 +71,7 @@ describe('/api/files Endpoints.', () => {
         .field('folderId', body.folderId)
         .attach('file', `${__dirname}/test.png`);
       expect(FolderService.getFolderById).toBeCalledWith(body.folderId);
-      expect(FileRepository.getOne).toBeCalled();
+      expect(FileService.getOneFile).toBeCalled();
       expect(S3Service.UploadFileToS3).toBeCalled();
       expect(FileService.createFile).toBeCalled();
       expect(CacheService.DeleteItem).toBeCalled();
@@ -122,7 +116,7 @@ describe('/api/files Endpoints.', () => {
       const response = await request(app)
         .get(`/api/files/${id}`)
         .set('Authorization', `Bearer ${token}`);
-      expect(FileService.getFileById).toBeCalledWith(FileMock.id);
+      expect(FileService.getFileById).toBeCalledWith(id);
       expect(response.statusCode).toBe(200);
       expect(response.body.success).toBe(true);
       expect(response.body.message).toBe('File fetched.');

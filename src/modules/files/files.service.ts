@@ -52,9 +52,6 @@ export default class FileService {
   */
   static async getOneFile(data: any): Promise<File> {
     const file = await FileRepository.getOne(data);
-    if (!file) {
-      throw new APIError({ message: 'File not found.', code: 404 });
-    }
     return file;
   }
 

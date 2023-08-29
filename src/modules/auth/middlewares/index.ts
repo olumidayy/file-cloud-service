@@ -41,14 +41,14 @@ export function AuthGuard(roles: string | string[]) {
         if (roles === '*' || roles.includes(data.role)) {
           return next();
         }
-        return next(new APIError({ message: 'Unauthorized1.', code: 401 }));
+        return next(new APIError({ message: 'Unauthorized.', code: 401 }));
       } catch (error) {
         logger.error(error);
         if (error.code) return next(error);
-        return next(new APIError({ message: 'Unauthorized2.', code: 401 }));
+        return next(new APIError({ message: 'Unauthorized.', code: 401 }));
       }
     } else {
-      return next(new APIError({ message: 'Unauthorized3.', code: 401 }));
+      return next(new APIError({ message: 'Unauthorized.', code: 401 }));
     }
   };
 }

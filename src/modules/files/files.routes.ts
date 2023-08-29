@@ -8,7 +8,6 @@ import { AuthGuard } from '../auth/middlewares';
 import FolderService from '../folders/folders.service';
 import S3Service from '../../services/s3.service';
 import { UpdateFileValidator, UploadFileValidator } from './files.validators';
-import FileRepository from './files.repository';
 import CacheService from '../../services/cache.service';
 import { paginateData } from '../../common/helpers';
 
@@ -31,7 +30,7 @@ export default (app: Router) => {
         throw new APIError({ message: 'File is missing.', code: 400 });
       }
       try {
-        const exists = await FileRepository.getOne({
+        const exists = await FileService.getOneFile({
           name: req.body.name,
           userId: req.currentUser.id,
         });
